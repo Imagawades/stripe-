@@ -1,0 +1,32 @@
+
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
+<script type='text/javascript' src="https://js.stripe.com/v3/"></script>
+<script>
+            $(function(){
+              var stripe = Stripe("pk_test_51HQ1JGCYlrZAIZ5DzoVYYszuopBDyu7sRggPr3YD7ATYWwmfNimqWn7ohtikOayPfQZHy6F6wqkQDgH8h8f1reve00YLNKNYZs");
+              $('#test').click(function(){
+                $.ajax({
+                  type:"POST",
+                  url: "http://localhost:3000/stripe",
+                  beforeSend: function(xhr) {
+                      xhr.setRequestHeader("X-CSRF-Token", $('meta[name="csrf-token"]').attr('content'))
+                  },
+                  success: function(data,textStatus,jqXHR){
+                    console.log(data);
+                    console.log('success');
+                    stripe.redirectToCheckout({
+                      sessionId:data.id.id,
+                    })
+                  },
+                  error: function(jqXHR, textStatus, errorThrow){
+                    console.log(jqXHR.responseText);
+                    console.log('error');
+                  }
+              })
+              }
+              )
+            })
+            </script>
+</body>
+
+</html>
